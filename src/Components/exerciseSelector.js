@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { Button, Portal, Modal, SegmentedButtons, Text, Card, IconButton, MD3Colors, Chip } from 'react-native-paper';
 import { View, SafeAreaView, StyleSheet } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
+import { SplitData } from '../Context/SplitContext';
 
 const ExerciseSelector = (props) => {
+    const { splitData, setExercise } = SplitData();
     const [visible, setVisible] = useState(false);
     const [tab, setTab] = useState('walk'); // Default tab, change later.
 
@@ -11,6 +13,7 @@ const ExerciseSelector = (props) => {
     const hideModal = () => setVisible(false);
     const containerStyle = { backgroundColor: 'white', padding: 20 };
 
+    const refreshExerciseCard = props.refreshExerciseCard;
     const exerciseName = props?.exerciseName;
     const exerciseNumber = props?.exerciseNumber;
 
@@ -43,7 +46,18 @@ const ExerciseSelector = (props) => {
                                 icon="plus"
                                 iconColor={MD3Colors.error50}
                                 size={20}
-                                onPress={() => console.log('Pressed')}
+                                onPress={() => {
+                                    console.log("PLUS!!");
+                                    setExercise(0, 0, {
+                                        blankExercise: false,
+                                        exerciseName: "",
+                                        amountOfReps: 0,
+                                        amountOfSets: 0,
+                                        machineName: "",
+                                        bodyPartsWorked: []
+                                    });
+                                    refreshExerciseCard(true);
+                                }}
                             />
                         </Card.Actions>
                     </Card>

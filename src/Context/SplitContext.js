@@ -69,20 +69,26 @@ export const SplitContextProvider = ({ children }) => {
         setSplitData(newSplitData);
     }
 
-    const setExercise = (event, day, exercise) => {
-        let exerciseData = exercise;
+    const setExercise = (dayIndex, exerciseIndex, exerciseData) => {
+        //let exerciseData = exerciseData;
+        /*
         exerciseData = {
             exercise_name: "",
             reps: 0,
             sets: 0
         }
-        console.log(day);
-        console.log(splitData[day])
+        */
+        splitData[dayIndex]['exercises'][exerciseIndex] = exerciseData
+        setSplitData(splitData);
+        //console.log(day);
+        //console.log(splitData[dayIndex])
+
+
         //let newSplitData = splitData.find((split_day) => split_day.day_name == day).exercises.push(exerciseData);
         //setSplitData(newSplitData);
     }
 
-    return (<SplitContext.Provider value={{ splitData }}>{children}</SplitContext.Provider>)
+    return (<SplitContext.Provider value={{ splitData, setExercise }}>{children}</SplitContext.Provider>)
 }
 
 export const SplitData = () => {
