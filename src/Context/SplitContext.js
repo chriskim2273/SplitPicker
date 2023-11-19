@@ -11,7 +11,7 @@ export const SplitContextProvider = ({ children }) => {
         machineName: "",
         bodyPartsWorked: []
     }
-    const nonBlankExerciseTemplate = {
+    const nonBlankExerciseExample = {
         blankExercise: false,
         exerciseName: "",
         amountOfReps: 0,
@@ -22,7 +22,7 @@ export const SplitContextProvider = ({ children }) => {
     const [splitData, setSplitData] = useState([
         {
             day_name: "e",
-            exercises: [exerciseTemplate, nonBlankExerciseTemplate]
+            exercises: [exerciseTemplate, nonBlankExerciseExample]
         },
         {
             day_name: "",
@@ -86,7 +86,12 @@ export const SplitContextProvider = ({ children }) => {
 
     }
 
-    return (<SplitContext.Provider value={{ splitData, setExercise, addDay, addExerciseToDay }}>{children}</SplitContext.Provider>)
+    const removeExercise = (dayIndex, exerciseIndex) => {
+        splitData[dayIndex]["exercises"].splice(exerciseIndex, 1);
+        setSplitData(splitData);
+    }
+
+    return (<SplitContext.Provider value={{ splitData, setExercise, addDay, addExerciseToDay, removeExercise }}>{children}</SplitContext.Provider>)
 }
 
 export const SplitData = () => {

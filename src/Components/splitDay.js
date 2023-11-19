@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Avatar, Button, Card, Text, List, MD3Colors, IconButton, Divider } from 'react-native-paper';
+import { View } from 'react-native';
 import ExerciseSelector from './exerciseSelector';
 import tw from 'tailwind-react-native-classnames';
 import ExerciseCard from './exerciseCard';
@@ -15,7 +16,7 @@ const LeftContent = props => <Avatar.Icon {...props} icon="folder" />
 */
 
 const SplitDay = (props) => {
-    const { setExercise, addDay, addExerciseToDay } = SplitData();
+    const { setExercise, addDay, addExerciseToDay, removeExercise } = SplitData();
 
     const dayNumber = props?.dayNumber === undefined ? "#N/A" : props.dayNumber;
     const splitDayData = props?.splitData;
@@ -25,23 +26,49 @@ const SplitDay = (props) => {
 
     const [refreshComponent, setRefreshComponent] = useState(false);
     return (
-        <Card style={tw`w-full flex justify-center items-center flex-col`}>
+        <Card style={tw`w-full flex justify-center items-center`}>
             <Card.Title
                 title={"Day " + dayNumber}
             />
             <Card.Content>
-                <List.Section>
+                <List.Section style={tw`w-80 flex justify-around items-center bg-gray-300`}>
                     <List.Subheader>Exercises For This Day</List.Subheader>
                     {exerciseArray.map((exercise, index) => {
                         const { blankExercise } = exercise;
 
                         if (blankExercise)
                             return (
-                                <ExerciseSelector key={index + "_blank_exercise"} exerciseNumber={index + 1} exerciseData={exercise} dayNumber={dayNumber} refreshExerciseCard={[refreshComponent, setRefreshComponent]} />
+                                <View key={index + "_exercise_view"} style={tw`w-full flex flex-row justify-evenly items-center bg-gray-300`}>
+                                    <ExerciseSelector key={index + "_blank_exercise"} exerciseNumber={index + 1} exerciseData={exercise} dayNumber={dayNumber} refreshExerciseCard={[refreshComponent, setRefreshComponent]} />
+                                    <IconButton
+                                        icon="minus"
+                                        style={tw`flex justify-center items-center`}
+                                        iconColor={MD3Colors.primary10}
+                                        size={30}
+                                        onPress={() => {
+                                            console.log("Remove exercise (" + String(index) + " from day " + String(dayNumber));
+                                            removeExercise(dayNumber - 1, index);
+                                            setRefreshComponent(!refreshComponent);
+                                        }}
+                                    />
+                                </View>
                             )
                         else
                             return (
-                                < ExerciseCard key={index + "_exercise"} exerciseNumber={index + 1} exerciseData={exercise} dayNumber={dayNumber} refreshExerciseCard={[refreshComponent, setRefreshComponent]} />
+                                <View key={index + "_exercise_view"} style={tw`w-full flex flex-row justify-evenly items-center bg-gray-300`}>
+                                    < ExerciseCard key={index + "_exercise"} exerciseNumber={index + 1} exerciseData={exercise} dayNumber={dayNumber} refreshExerciseCard={[refreshComponent, setRefreshComponent]} />
+                                    <IconButton
+                                        icon="minus"
+                                        style={tw`flex justify-center items-center`}
+                                        iconColor={MD3Colors.primary10}
+                                        size={30}
+                                        onPress={() => {
+                                            console.log("Remove exercise (" + String(index) + " from day " + String(dayNumber));
+                                            removeExercise(dayNumber - 1, index);
+                                            setRefreshComponent(!refreshComponent);
+                                        }}
+                                    />
+                                </View>
                             )
                     })}
                     <IconButton
