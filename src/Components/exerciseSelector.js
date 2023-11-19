@@ -5,7 +5,7 @@ import tw from 'tailwind-react-native-classnames';
 import { SplitData } from '../Context/SplitContext';
 
 const ExerciseSelector = (props) => {
-    const { splitData, setExercise } = SplitData();
+    const { setExercise } = SplitData();
     const [visible, setVisible] = useState(false);
     const [tab, setTab] = useState('walk'); // Default tab, change later.
 
@@ -13,9 +13,10 @@ const ExerciseSelector = (props) => {
     const hideModal = () => setVisible(false);
     const containerStyle = { backgroundColor: 'white', padding: 20 };
 
-    const refreshExerciseCard = props.refreshExerciseCard;
+    const [refreshExerciseCard, setRefreshExerciseCard] = props.refreshExerciseCard;
     const exerciseName = props?.exerciseName;
     const exerciseNumber = props?.exerciseNumber;
+    const dayNumber = props?.dayNumber;
 
     const styles = StyleSheet.create({
         container: {
@@ -48,15 +49,15 @@ const ExerciseSelector = (props) => {
                                 size={20}
                                 onPress={() => {
                                     console.log("PLUS!!");
-                                    setExercise(0, 0, {
+                                    setExercise(dayNumber - 1, exerciseNumber - 1, {
                                         blankExercise: false,
-                                        exerciseName: "",
-                                        amountOfReps: 0,
-                                        amountOfSets: 0,
-                                        machineName: "",
-                                        bodyPartsWorked: []
+                                        exerciseName: "Dumbbell Bench Press",
+                                        amountOfReps: 5,
+                                        amountOfSets: 5,
+                                        machineName: "Dumbbell",
+                                        bodyPartsWorked: ["Chest"]
                                     });
-                                    refreshExerciseCard(true);
+                                    setRefreshExerciseCard(!refreshExerciseCard);
                                 }}
                             />
                         </Card.Actions>

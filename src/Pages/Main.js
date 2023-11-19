@@ -7,7 +7,7 @@ import { SplitData } from '../Context/SplitContext';
 import SplitDay from '../Components/splitDay';
 
 function Main() {
-    const { splitData, setExercise } = SplitData();
+    const { splitData } = SplitData();
     /*
     console.log(splitData);
     setExercise(0, 0, {

@@ -58,15 +58,9 @@ export const SplitContextProvider = ({ children }) => {
         setSplitData(newSplitData);
     }
 
-    const addExerciseToDay = (day, exercise) => {
-        let exerciseData = exercise;
-        exerciseData = {
-            exercise_name: "",
-            reps: 0,
-            sets: 0
-        }
-        let newSplitData = splitData.find((split_day) => split_day.day_name == day).exercises.push(exerciseData);
-        setSplitData(newSplitData);
+    const addExerciseToDay = (dayIndex) => {
+        splitData[dayIndex]['exercises'].push({ ...exerciseTemplate })
+        setSplitData(splitData);
     }
 
     const setExercise = (dayIndex, exerciseIndex, exerciseData) => {
@@ -88,7 +82,11 @@ export const SplitContextProvider = ({ children }) => {
         //setSplitData(newSplitData);
     }
 
-    return (<SplitContext.Provider value={{ splitData, setExercise }}>{children}</SplitContext.Provider>)
+    const addNewExercise = () => {
+
+    }
+
+    return (<SplitContext.Provider value={{ splitData, setExercise, addDay, addExerciseToDay }}>{children}</SplitContext.Provider>)
 }
 
 export const SplitData = () => {

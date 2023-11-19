@@ -15,7 +15,7 @@ const LeftContent = props => <Avatar.Icon {...props} icon="folder" />
 */
 
 const SplitDay = (props) => {
-    const { splitData, setExercise } = SplitData();
+    const { setExercise, addDay, addExerciseToDay } = SplitData();
 
     const dayNumber = props?.dayNumber === undefined ? "#N/A" : props.dayNumber;
     const splitDayData = props?.splitData;
@@ -24,7 +24,6 @@ const SplitDay = (props) => {
     console.log(exerciseArray);
 
     const [refreshComponent, setRefreshComponent] = useState(false);
-    const [exerciseAmount, setExerciseAmount] = useState(1);
     return (
         <Card style={tw`w-full flex justify-center items-center flex-col`}>
             <Card.Title
@@ -34,20 +33,15 @@ const SplitDay = (props) => {
                 <List.Section>
                     <List.Subheader>Exercises For This Day</List.Subheader>
                     {exerciseArray.map((exercise, index) => {
-                        const { blankExercise,
-                            exerciseName,
-                            amountOfReps,
-                            amountOfSets,
-                            machineName,
-                            bodyPartsWorked } = exercise;
+                        const { blankExercise } = exercise;
 
                         if (blankExercise)
                             return (
-                                <ExerciseSelector key={index + "_blank_exercise"} exerciseNumber={index + 1} exerciseData={exercise} refreshExerciseCard={setRefreshComponent} />
+                                <ExerciseSelector key={index + "_blank_exercise"} exerciseNumber={index + 1} exerciseData={exercise} dayNumber={dayNumber} refreshExerciseCard={[refreshComponent, setRefreshComponent]} />
                             )
                         else
                             return (
-                                < ExerciseCard key={index + "_exercise"} refreshExerciseCard={setRefreshComponent} />
+                                < ExerciseCard key={index + "_exercise"} exerciseNumber={index + 1} exerciseData={exercise} dayNumber={dayNumber} refreshExerciseCard={[refreshComponent, setRefreshComponent]} />
                             )
                     })}
                     <IconButton
@@ -55,7 +49,11 @@ const SplitDay = (props) => {
                         style={tw`flex justify-center items-center`}
                         iconColor={MD3Colors.primary10}
                         size={30}
-                        onPress={() => setExerciseAmount(exerciseAmount + 1)}
+                        onPress={() => {
+                            console.log("Add exercise to day " + String(dayNumber));
+                            addExerciseToDay(dayNumber - 1);
+                            setRefreshComponent(!refreshComponent);
+                        }}
                     />
                 </List.Section>
             </Card.Content>
