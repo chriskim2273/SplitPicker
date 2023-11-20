@@ -22,6 +22,14 @@ function DetailsScreen() {
       <Text>Details Screen</Text>
     </View>
   );
+
+}
+function Settings() {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Settings Screen</Text>
+    </View>
+  );
 }
 
 const Tab = createBottomTabNavigator();
@@ -36,6 +44,7 @@ function App() {
         <Tab.Navigator>
           <Tab.Screen name="SplitPicker" component={Main} />
           <Tab.Screen name="Details" component={DetailsScreen} />
+          <Tab.Screen name="Settings" component={Settings} />
         </Tab.Navigator>
       </NavigationContainer>
     </SplitContextProvider>
