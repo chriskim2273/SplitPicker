@@ -82,6 +82,13 @@ export const SplitContextProvider = ({ children }) => {
         //setSplitData(newSplitData);
     }
 
+    const setExerciseSetsandReps = (dayIndex, exerciseIndex, newSets, newReps) => {
+        splitData[dayIndex]['exercises'][exerciseIndex]["amountOfSets"] = newSets;
+        splitData[dayIndex]['exercises'][exerciseIndex]["amountOfReps"] = newReps;
+        console.log(splitData[dayIndex]['exercises'][exerciseIndex]);
+        setSplitData(splitData);
+    }
+
     const addNewExercise = () => {
 
     }
@@ -91,7 +98,7 @@ export const SplitContextProvider = ({ children }) => {
         setSplitData(splitData);
     }
 
-    return (<SplitContext.Provider value={{ splitData, setExercise, addDay, addExerciseToDay, removeExercise }}>{children}</SplitContext.Provider>)
+    return (<SplitContext.Provider value={{ splitData, setExercise, addDay, addExerciseToDay, removeExercise, setExerciseSetsandReps }}>{children}</SplitContext.Provider>)
 }
 
 export const SplitData = () => {
