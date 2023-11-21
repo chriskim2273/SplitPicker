@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Image } from 'react-native';
 import { Card, Button, Modal, Portal, Text, ProgressBar, MD3Colors } from 'react-native-paper';
 import tw from 'tailwind-react-native-classnames';
-import ExerciseScoreCalculator from '../Calculations/exerciseScoreCalculation';
+import { ExerciseScoreCalculator, volumePerMuscle } from '../Calculations/exerciseScoreCalculation';
 
 const ExerciseScore = () => {
     const [visible, setVisible] = useState(false);
@@ -16,6 +16,8 @@ const ExerciseScore = () => {
             <Portal>
                 <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
                     <Text>{ExerciseScoreCalculator()}</Text>
+                    <Text>{"\n"}</Text>
+                    <Text>{volumePerMuscle()}</Text>
                 </Modal>
             </Portal>
 

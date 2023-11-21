@@ -5,6 +5,7 @@ import { View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SplitContextProvider } from './src/Context/SplitContext';
+import { AuthContextProvider } from './src/Context/AuthContext';
 import Main from './src/Pages/Main'
 
 
@@ -39,15 +40,23 @@ const Tab = createBottomTabNavigator();
 
 function App() {
   return (
-    <SplitContextProvider>
-      <NavigationContainer>
-        <Tab.Navigator>
-          <Tab.Screen name="SplitPicker" component={Main} />
-          <Tab.Screen name="Details" component={DetailsScreen} />
-          <Tab.Screen name="Settings" component={Settings} />
-        </Tab.Navigator>
-      </NavigationContainer>
-    </SplitContextProvider>
+    <AuthContextProvider>
+      <SplitContextProvider>
+        <NavigationContainer>
+          <Tab.Navigator>
+            <Tab.Screen name="SplitPicker" component={Main} options={{
+              headerrRight: (props) => (
+                <Text>LogIn</Text>
+              )
+            }} />
+            <Tab.Screen name="Details" component={DetailsScreen} />
+            <Tab.Screen name="Settings" component={Settings} options={{
+              tabBarLabel: 'Updates',
+            }} />
+          </Tab.Navigator>
+        </NavigationContainer>
+      </SplitContextProvider>
+    </AuthContextProvider>
   );
 }
 

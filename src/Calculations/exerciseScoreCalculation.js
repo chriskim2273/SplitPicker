@@ -1,7 +1,7 @@
 
 import { SplitData } from '../Context/SplitContext';
 
-const ExerciseScoreCalculator = () => {
+export const ExerciseScoreCalculator = () => {
     const { splitData } = SplitData();
 
     let score = 0;
@@ -78,4 +78,68 @@ const ExerciseScoreCalculator = () => {
 
     return (score);
 }
+
+export const volumePerMuscle = () => {
+    const { splitData } = SplitData();
+
+    let score = 0;
+
+    const musclesList = [
+        "Abductors",
+        "Abs",
+        "Adductors",
+        "Biceps",
+        "Calves",
+        "Chest",
+        "Forearms",
+        "Glutes",
+        "Hamstrings",
+        "Hip Flexors",
+        "IT Band",
+        "Lats",
+        "Lower Back",
+        "Middle Back",
+        "Neck",
+        "Obliques",
+        "Palmar Fascia",
+        "Plantar Fascia",
+        "Quads",
+        "Shoulders",
+        "Traps",
+        "Triceps",
+        "Upper Back"
+    ]
+
+    const volumePerMuscle = {}
+
+    musclesList.forEach((muscle) => {
+        volumePerMuscle[muscle] = 100;
+    });
+
+    try {
+
+        splitData.forEach((splitDay, dayNumber) => {
+            const dayName = splitDay.dayName;
+            const exerciseList = splitDay.exercises;
+
+            exerciseList.forEach((exerciseData, exerciseNumber) => {
+                const { blankExercise, exerciseName, exerciseType, forceType, mechanics, primaryMuscle, secondaryMuscles, equipment, amountOfReps, amountOfSets } = exerciseData;
+
+                volumePerMuscle[primaryMuscle] -= amountOfReps * amountOfSets;
+
+                secondaryMuscles.forEach((secondaryMuscle) => {
+                    volumePerMuscle[secondaryMuscle] -= amountOfReps * amountOfSets;
+                })
+
+            })
+
+        })
+    } catch (error) {
+        console.error(error);
+        return 0;
+    }
+
+    return JSON.stringify(volumePerMuscle);
+}
+
 export default ExerciseScoreCalculator;

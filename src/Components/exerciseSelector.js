@@ -122,7 +122,7 @@ const ExerciseSelector = (props) => {
                         value={searchQuery}
                         style={tw`mt-2 mb-4`}
                     />
-                    <ScrollView >
+                    <ScrollView style={tw`flex`}>
                         {presetExerciseCards()}
                     </ScrollView >
                 </SafeAreaView>);

@@ -45,7 +45,7 @@ function Main() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const url = 'https://exerciseapi3.p.rapidapi.com/exercise/primary_muscle/chest';
+            const url = 'https://exerciseapi3.p.rapidapi.com/exercise/primary_muscle/Lower%20Back';
             const options = {
                 method: 'GET',
                 headers: {
