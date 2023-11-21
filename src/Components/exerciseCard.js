@@ -7,7 +7,7 @@ const ExerciseCard = (props) => {
     //const exerciseName = props?.exerciseName;
     const exerciseNumber = props?.exerciseNumber;
     const dayNumber = props?.dayNumber;
-    const { blankExercise, exerciseName, amountOfReps, amountOfSets, machineName, bodyPartsWorked } = props.exerciseData;
+    const { blankExercise, exerciseName, exerciseType, forceType, mechanics, primaryMuscle, secondaryMuscles, equipment, amountOfReps, amountOfSets } = props.exerciseData;
 
     return (
         <Card style={tw`w-60 flex flex-row justify-around items-center bg-gray-300 p-4`}>

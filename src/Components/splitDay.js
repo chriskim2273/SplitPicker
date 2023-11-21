@@ -20,6 +20,7 @@ const SplitDay = (props) => {
 
     const dayNumber = props?.dayNumber === undefined ? "#N/A" : props.dayNumber;
     const splitDayData = props?.splitData;
+    const presetExercises = props.presetExercises;
     let exerciseArray = Array.from(splitDayData?.exercises);
     // exerciseArray should be an array of objects detialed in splitcontext now.
     console.log(exerciseArray);
@@ -39,7 +40,7 @@ const SplitDay = (props) => {
                         if (blankExercise)
                             return (
                                 <View key={index + "_exercise_view"} style={tw`w-full flex flex-row justify-evenly items-center bg-gray-300`}>
-                                    <ExerciseSelector key={index + "_blank_exercise"} exerciseNumber={index + 1} exerciseData={exercise} dayNumber={dayNumber} refreshExerciseCard={[refreshComponent, setRefreshComponent]} />
+                                    <ExerciseSelector key={index + "_blank_exercise"} exerciseNumber={index + 1} exerciseData={exercise} dayNumber={dayNumber} refreshExerciseCard={[refreshComponent, setRefreshComponent]} presetExercises={presetExercises} />
                                     <IconButton
                                         icon="minus"
                                         style={tw`flex justify-center items-center`}

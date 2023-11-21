@@ -21,8 +21,8 @@ export const SplitContextProvider = ({ children }) => {
     }
     const [splitData, setSplitData] = useState([
         {
-            day_name: "e",
-            exercises: [exerciseTemplate, nonBlankExerciseExample]
+            day_name: "",
+            exercises: []
         },
         {
             day_name: "",
