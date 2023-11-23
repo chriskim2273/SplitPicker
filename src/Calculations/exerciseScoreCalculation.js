@@ -1,12 +1,4 @@
-
-import { SplitData } from '../Context/SplitContext';
-
-export const ExerciseScoreCalculator = () => {
-    const { splitData } = SplitData();
-
-    if (splitData == null)
-        return 0;
-
+export const ExerciseScoreCalculator = (splitData) => {
     let score = 0;
 
     const musclesList = [
@@ -50,17 +42,20 @@ export const ExerciseScoreCalculator = () => {
             exerciseList.forEach((exerciseData, exerciseNumber) => {
                 const { blankExercise, exerciseName, exerciseType, forceType, mechanics, primaryMuscle, secondaryMuscles, equipment, amountOfReps, amountOfSets } = exerciseData;
 
-                volumePerMuscle[primaryMuscle] -= amountOfReps * amountOfSets;
+                if (blankExercise == false) {
+                    //console.log("SECONDARY MUSCLE DATA DURING CALC: " + String(JSON.stringify(exerciseData)));
+                    volumePerMuscle[primaryMuscle] -= amountOfReps * amountOfSets;
 
-                secondaryMuscles.forEach((secondaryMuscle) => {
-                    volumePerMuscle[secondaryMuscle] -= amountOfReps * amountOfSets;
-                });
+                    secondaryMuscles.forEach((secondaryMuscle) => {
+                        volumePerMuscle[secondaryMuscle] -= amountOfReps * amountOfSets;
+                    });
+                }
 
             })
 
         })
     } catch (error) {
-        //console.error(error); FIX THIS???
+        console.error(error); //FIX THIS ???
         return 0;
     }
 
@@ -78,16 +73,10 @@ export const ExerciseScoreCalculator = () => {
     score = 2300 - score; //make dynamic maybe by getting total of all muscles and their volume
     score /= 2300;
     //score *= 100;
-
-    return (score);
+    return score;
 }
 
-export const volumePerMuscle = () => {
-    const { splitData } = SplitData();
-
-    if (splitData == null)
-        return 0;
-
+export const volumePerMuscle = (splitData) => {
     let score = 0;
 
     const musclesList = [

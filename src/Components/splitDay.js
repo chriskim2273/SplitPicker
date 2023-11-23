@@ -24,8 +24,9 @@ const SplitDay = (props) => {
     let exerciseArray = Array.from(splitDayData?.exercises);
     // exerciseArray should be an array of objects detialed in splitcontext now.
     console.log(exerciseArray);
+    const [refreshMain, startRefreshMain] = props.refreshMain;
 
-    const [refreshComponent, setRefreshComponent] = useState(false);
+    //const [refreshComponent, setRefreshComponent] = useState(false);
     return (
         <Card style={tw`w-full flex justify-center items-center`}>
             <Card.Title
@@ -40,7 +41,7 @@ const SplitDay = (props) => {
                         if (blankExercise)
                             return (
                                 <View key={index + "_exercise_view"} style={tw`w-full flex flex-row justify-evenly items-center bg-gray-300`}>
-                                    <ExerciseSelector key={index + "_blank_exercise"} exerciseNumber={index + 1} exerciseData={exercise} dayNumber={dayNumber} refreshExerciseCard={[refreshComponent, setRefreshComponent]} presetExercises={presetExercises} />
+                                    <ExerciseSelector key={index + "_blank_exercise"} exerciseNumber={index + 1} exerciseData={exercise} dayNumber={dayNumber} refreshExerciseCard={[refreshMain, startRefreshMain]} presetExercises={presetExercises} />
                                     <IconButton
                                         icon="minus"
                                         style={tw`flex justify-center items-center`}
@@ -49,7 +50,8 @@ const SplitDay = (props) => {
                                         onPress={() => {
                                             console.log("Remove exercise (" + String(index) + " from day " + String(dayNumber));
                                             removeExercise(dayNumber - 1, index);
-                                            setRefreshComponent(!refreshComponent);
+                                            //setRefreshComponent(!refreshComponent);
+                                            startRefreshMain(!refreshMain);
                                         }}
                                     />
                                 </View>
@@ -57,7 +59,7 @@ const SplitDay = (props) => {
                         else
                             return (
                                 <View key={index + "_exercise_view"} style={tw`w-full flex flex-row justify-evenly items-center bg-gray-300`}>
-                                    < ExerciseCard key={index + "_exercise"} exerciseNumber={index + 1} exerciseData={exercise} dayNumber={dayNumber} refreshExerciseCard={[refreshComponent, setRefreshComponent]} />
+                                    < ExerciseCard key={index + "_exercise"} exerciseNumber={index + 1} exerciseData={exercise} dayNumber={dayNumber} refreshExerciseCard={[refreshMain, startRefreshMain]} />
                                     <IconButton
                                         icon="minus"
                                         style={tw`flex justify-center items-center`}
@@ -66,7 +68,9 @@ const SplitDay = (props) => {
                                         onPress={() => {
                                             console.log("Remove exercise (" + String(index) + " from day " + String(dayNumber));
                                             removeExercise(dayNumber - 1, index);
-                                            setRefreshComponent(!refreshComponent);
+                                            //setRefreshComponent(!refreshComponent);
+
+                                            startRefreshMain(!refreshMain);
                                         }}
                                     />
                                 </View>

@@ -1,16 +1,22 @@
 import { useContext, createContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import ExerciseScoreCalculator from '../Calculations/exerciseScoreCalculation';
+
 const SplitContext = createContext()
 
 export const SplitContextProvider = ({ children }) => {
     const exerciseTemplate = {
         blankExercise: true,
-        exerciseName: "",
-        amountOfReps: 0,
-        amountOfSets: 0,
-        machineName: "",
-        bodyPartsWorked: []
+        exerciseName: undefined,
+        exerciseType: undefined,
+        forceType: undefined,
+        mechanics: undefined,
+        primaryMuscle: undefined,
+        secondaryMuscles: [],
+        equipment: undefined,
+        amountOfReps: undefined,
+        amountOfSets: undefined,
     }
     const nonBlankExerciseExample = {
         blankExercise: false,
@@ -81,6 +87,8 @@ export const SplitContextProvider = ({ children }) => {
         }
     }, [isReady]); // The effect will re-run whenever the 'value' changes
 
+
+
     const saveSplitDataLocally = async () => {
         console.log("Saving to async storage.")
         AsyncStorage.setItem(PERSISTENCE_KEY, JSON.stringify(splitData));
@@ -94,6 +102,7 @@ export const SplitContextProvider = ({ children }) => {
             console.error('Error clearing AsyncStorage:', error);
         }
     };
+    //clearAsyncStorage();
 
     const addDay = () => {
         let newSplitData = splitData.push({

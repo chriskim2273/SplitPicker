@@ -5,9 +5,11 @@ import ExerciseScore from '../Components/exerciseScore';
 import Header from '../Components/header';
 import { SplitData } from '../Context/SplitContext';
 import SplitDay from '../Components/splitDay';
+import ExerciseScoreCalculator from '../Calculations/exerciseScoreCalculation';
 
 function Main() {
     const { splitData } = SplitData();
+    const [refresh, startRefresh] = useState(false);
     /*
     console.log(splitData);
     setExercise(0, 0, {
@@ -43,6 +45,8 @@ function Main() {
         });
     }
 
+    const [exerciseScore, setExerciseScore] = useState(0);
+
     useEffect(() => {
         const fetchData = async () => {
             const url = 'https://exerciseapi3.p.rapidapi.com/exercise/primary_muscle/Lower%20Back';
@@ -64,10 +68,12 @@ function Main() {
                 console.error(error);
             }
         };
-
         fetchData(); // Call the function to fetch data when the component mounts
+
+        //const calculateExerciseScore = await ExerciseScoreCalculator(splitData);
     }, []); // Empty dependency array to ensure it runs only once
 
+    //console.log("SCOREEE: " + String(exerciseScore));
     //const { isOpen, onOpen, onClose } = useDisclosure();
     //const { addDay, addExerciseToDay, setExercise } = SplitData();
     const styles = StyleSheet.create({
@@ -80,13 +86,16 @@ function Main() {
 
     let splitDayArray = Array.from(splitData, item => item);
     console.log(splitDayArray);
+
+
+
     return (
         <PaperProvider>
 
-            <ExerciseScore />
+            <ExerciseScore exerciseScore={ExerciseScoreCalculator(splitData)} />
             <ScrollView contentContainerStyle={styles.contentContainer}>
                 {splitDayArray.map((splitDay, index) => (
-                    <SplitDay key={index + "_split_day"} splitData={splitDay} dayName={splitDay.day_number} dayNumber={index + 1} presetExercises={presetExercises} />
+                    <SplitDay key={index + "_split_day"} refreshMain={[refresh, startRefresh]} splitData={splitDay} dayName={splitDay.day_number} dayNumber={index + 1} presetExercises={presetExercises} />
                 ))}
             </ScrollView>
         </PaperProvider>
