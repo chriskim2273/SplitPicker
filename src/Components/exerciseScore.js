@@ -13,6 +13,7 @@ const ExerciseScore = () => {
     return (
 
         <Card style={tw`relative top-0 w-full flex justify-center items-center flex-col mb-4`}>
+
             <Portal>
                 <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
                     <Text>{ExerciseScoreCalculator()}</Text>

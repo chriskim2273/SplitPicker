@@ -6,6 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SplitContextProvider } from './src/Context/SplitContext';
 import { AuthContextProvider } from './src/Context/AuthContext';
+import { AuthenticationButtons } from './src/Components/authenticationButtons';
 import Main from './src/Pages/Main'
 
 
@@ -38,6 +39,10 @@ const Tab = createBottomTabNavigator();
 // TODO: https://reactnavigation.org/docs/bottom-tab-navigator
 // TODO: npm run ios
 
+// TODO: https://reactnavigation.org/docs/elements/#header
+
+//const { store, persistor } = configureStore();
+
 function App() {
   return (
     <AuthContextProvider>
@@ -45,8 +50,8 @@ function App() {
         <NavigationContainer>
           <Tab.Navigator>
             <Tab.Screen name="SplitPicker" component={Main} options={{
-              headerrRight: (props) => (
-                <Text>LogIn</Text>
+              headerRight: (props) => (
+                <AuthenticationButtons />
               )
             }} />
             <Tab.Screen name="Details" component={DetailsScreen} />

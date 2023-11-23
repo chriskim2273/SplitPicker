@@ -4,6 +4,9 @@ import { SplitData } from '../Context/SplitContext';
 export const ExerciseScoreCalculator = () => {
     const { splitData } = SplitData();
 
+    if (splitData == null)
+        return 0;
+
     let score = 0;
 
     const musclesList = [
@@ -51,13 +54,13 @@ export const ExerciseScoreCalculator = () => {
 
                 secondaryMuscles.forEach((secondaryMuscle) => {
                     volumePerMuscle[secondaryMuscle] -= amountOfReps * amountOfSets;
-                })
+                });
 
             })
 
         })
     } catch (error) {
-        console.error(error);
+        //console.error(error); FIX THIS???
         return 0;
     }
 
@@ -82,6 +85,9 @@ export const ExerciseScoreCalculator = () => {
 export const volumePerMuscle = () => {
     const { splitData } = SplitData();
 
+    if (splitData == null)
+        return 0;
+
     let score = 0;
 
     const musclesList = [
@@ -129,13 +135,12 @@ export const volumePerMuscle = () => {
 
                 secondaryMuscles.forEach((secondaryMuscle) => {
                     volumePerMuscle[secondaryMuscle] -= amountOfReps * amountOfSets;
-                })
-
+                });
             })
 
         })
     } catch (error) {
-        console.error(error);
+        //console.error(error);
         return 0;
     }
 

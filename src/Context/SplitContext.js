@@ -1,4 +1,5 @@
 import { useContext, createContext, useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SplitContext = createContext()
 
@@ -19,7 +20,8 @@ export const SplitContextProvider = ({ children }) => {
         machineName: "",
         bodyPartsWorked: []
     }
-    const [splitData, setSplitData] = useState([
+
+    const defaultSplitData = [
         {
             day_name: "",
             exercises: []
@@ -48,7 +50,50 @@ export const SplitContextProvider = ({ children }) => {
             day_name: "",
             exercises: []
         }
-    ]);
+    ];
+
+    const [splitData, setSplitData] = useState(defaultSplitData);
+    const [isReady, setIsReady] = useState(false);
+
+    const PERSISTENCE_KEY = 'SPLIT_DATA_V1';
+    useEffect(() => {
+        const restoreSplit = async () => {
+            try {
+                /*
+                const initialUrl = await Linking.getInitialURL();
+
+                if (Platform.OS !== 'web' && initialUrl == null) {
+                    // Only restore state if there's no deep link and we're not on web
+                    */
+                const savedStateString = await AsyncStorage.getItem(PERSISTENCE_KEY);
+                console.log("Saved State: " + String(savedStateString));
+                const state = savedStateString ? JSON.parse(savedStateString) : defaultSplitData;
+
+                setSplitData(state);
+            } finally {
+
+                //
+                setIsReady(true);
+            }
+        };
+        if (!isReady) {
+            restoreSplit();
+        }
+    }, [isReady]); // The effect will re-run whenever the 'value' changes
+
+    const saveSplitDataLocally = async () => {
+        console.log("Saving to async storage.")
+        AsyncStorage.setItem(PERSISTENCE_KEY, JSON.stringify(splitData));
+    }
+
+    const clearAsyncStorage = async () => {
+        try {
+            await AsyncStorage.clear();
+            console.log('AsyncStorage cleared successfully.');
+        } catch (error) {
+            console.error('Error clearing AsyncStorage:', error);
+        }
+    };
 
     const addDay = () => {
         let newSplitData = splitData.push({
@@ -61,6 +106,7 @@ export const SplitContextProvider = ({ children }) => {
     const addExerciseToDay = (dayIndex) => {
         splitData[dayIndex]['exercises'].push({ ...exerciseTemplate })
         setSplitData(splitData);
+        saveSplitDataLocally();
     }
 
     const setExercise = (dayIndex, exerciseIndex, exerciseData) => {
@@ -74,6 +120,7 @@ export const SplitContextProvider = ({ children }) => {
         */
         splitData[dayIndex]['exercises'][exerciseIndex] = exerciseData
         setSplitData(splitData);
+        saveSplitDataLocally();
         //console.log(day);
         //console.log(splitData[dayIndex])
 
@@ -87,6 +134,7 @@ export const SplitContextProvider = ({ children }) => {
         splitData[dayIndex]['exercises'][exerciseIndex]["amountOfReps"] = newReps;
         console.log(splitData[dayIndex]['exercises'][exerciseIndex]);
         setSplitData(splitData);
+        saveSplitDataLocally();
     }
 
     const addNewExercise = () => {
@@ -96,6 +144,7 @@ export const SplitContextProvider = ({ children }) => {
     const removeExercise = (dayIndex, exerciseIndex) => {
         splitData[dayIndex]["exercises"].splice(exerciseIndex, 1);
         setSplitData(splitData);
+        saveSplitDataLocally();
     }
 
     return (<SplitContext.Provider value={{ splitData, setExercise, addDay, addExerciseToDay, removeExercise, setExerciseSetsandReps }}>{children}</SplitContext.Provider>)
