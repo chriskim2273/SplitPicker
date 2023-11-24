@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
 import { PaperProvider } from 'react-native-paper';
 import ExerciseScore from '../Components/exerciseScore';
 import Header from '../Components/header';
 import { SplitData } from '../Context/SplitContext';
 import SplitDay from '../Components/splitDay';
 import ExerciseScoreCalculator from '../Calculations/exerciseScoreCalculation';
+import ChangeSplitModal from '../Components/changeSplitModal';
+import registerNewUser from '../API/axiosRequests';
+import { UserAuth } from '../Context/AuthContext';
 
 function Main() {
+    const { user } = UserAuth();
     const { splitData } = SplitData();
     const [refresh, startRefresh] = useState(false);
     /*
@@ -50,6 +54,7 @@ function Main() {
     useEffect(() => {
         const fetchData = async () => {
             const url = 'https://exerciseapi3.p.rapidapi.com/exercise/primary_muscle/Lower%20Back';
+            const url_c = 'https://exerciseapi3.p.rapidapi.com/exercise/primary_muscle/Chest';
             const options = {
                 method: 'GET',
                 headers: {
@@ -64,11 +69,18 @@ function Main() {
                 const resultObject = JSON.parse(result);
                 console.log(resultObject);
                 setPresetExercises(modifyExerciseAPIData(resultObject.exercises));
+                /*const response_c = await fetch(url_c, options);
+                const result_c = await response_c.text();
+                const resultObject_c = JSON.parse(result_c);
+                console.log(resultObject_c);
+                setPresetExercises(presetExercises.concat(modifyExerciseAPIData(resultObject_c.exercises)));*/
             } catch (error) {
                 console.error(error);
             }
         };
         fetchData(); // Call the function to fetch data when the component mounts
+        console.log('user' + JSON.stringify(user));
+        //registerNewUser(user);
 
         //const calculateExerciseScore = await ExerciseScoreCalculator(splitData);
     }, []); // Empty dependency array to ensure it runs only once
@@ -85,20 +97,19 @@ function Main() {
     });
 
     let splitDayArray = Array.from(splitData, item => item);
-    console.log(splitDayArray);
+    //console.log(splitDayArray);
 
 
 
     return (
-        <PaperProvider>
-
+        <SafeAreaView>
             <ExerciseScore exerciseScore={ExerciseScoreCalculator(splitData)} />
             <ScrollView contentContainerStyle={styles.contentContainer}>
                 {splitDayArray.map((splitDay, index) => (
                     <SplitDay key={index + "_split_day"} refreshMain={[refresh, startRefresh]} splitData={splitDay} dayName={splitDay.day_number} dayNumber={index + 1} presetExercises={presetExercises} />
                 ))}
             </ScrollView>
-        </PaperProvider>
+        </SafeAreaView>
     )
 }
 export default Main;

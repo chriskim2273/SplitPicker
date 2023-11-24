@@ -84,7 +84,7 @@ const SplitDay = (props) => {
                         onPress={() => {
                             console.log("Add exercise to day " + String(dayNumber));
                             addExerciseToDay(dayNumber - 1);
-                            setRefreshComponent(!refreshComponent);
+                            startRefreshMain(!refreshMain);
                         }}
                     />
                 </List.Section>

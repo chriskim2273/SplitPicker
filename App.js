@@ -8,6 +8,9 @@ import { SplitContextProvider } from './src/Context/SplitContext';
 import { AuthContextProvider } from './src/Context/AuthContext';
 import { AuthenticationButtons } from './src/Components/authenticationButtons';
 import Main from './src/Pages/Main'
+import ExerciseSelector from './src/Components/exerciseSelector';
+import ChangeSplitModal from './src/Components/changeSplitModal';
+import { PaperProvider } from 'react-native-paper';
 
 
 function HomeScreen() {
@@ -47,19 +50,22 @@ function App() {
   return (
     <AuthContextProvider>
       <SplitContextProvider>
-        <NavigationContainer>
-          <Tab.Navigator>
-            <Tab.Screen name="SplitPicker" component={Main} options={{
-              headerRight: (props) => (
-                <AuthenticationButtons />
-              )
-            }} />
-            <Tab.Screen name="Details" component={DetailsScreen} />
-            <Tab.Screen name="Settings" component={Settings} options={{
-              tabBarLabel: 'Updates',
-            }} />
-          </Tab.Navigator>
-        </NavigationContainer>
+        <PaperProvider>
+          <NavigationContainer>
+            <Tab.Navigator>
+              <Tab.Screen name="SplitPicker" component={Main} options={{
+                headerRight: (props) => (
+                  <AuthenticationButtons />
+                ),
+                headerTitle: (props) => <ChangeSplitModal />
+              }} />
+              <Tab.Screen name="Details" component={DetailsScreen} />
+              <Tab.Screen name="Settings" component={Settings} options={{
+                tabBarLabel: 'Updates',
+              }} />
+            </Tab.Navigator>
+          </NavigationContainer>
+        </PaperProvider>
       </SplitContextProvider>
     </AuthContextProvider>
   );

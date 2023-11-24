@@ -9,7 +9,7 @@ const ExerciseScore = (props) => {
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
     const containerStyle = { backgroundColor: 'white', padding: 20 };
-    console.log("EXERCISE SCORE RIGHT BEFORE: " + String(props.exerciseScore));
+    //console.log("EXERCISE SCORE RIGHT BEFORE: " + String(props.exerciseScore));
     const exerciseScore = props?.exerciseScore == undefined ? 0 : props.exerciseScore;
     return (
 

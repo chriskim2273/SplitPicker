@@ -27,6 +27,8 @@ export const SplitContextProvider = ({ children }) => {
         bodyPartsWorked: []
     }
 
+    const [currentSplitId, setCurrentSplitId] = useState("");
+
     const defaultSplitData = [
         {
             day_name: "",
