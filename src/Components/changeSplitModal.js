@@ -4,11 +4,17 @@ import { Modal, Portal, Text, Button, Icon } from 'react-native-paper';
 import { SplitData } from '../Context/SplitContext';
 
 const ChangeSplitModal = () => {
-    const [visible, setVisible] = React.useState(false);
     const { splitData, currentSplitId } = SplitData();
 
-    const showModal = () => setVisible(true);
-    const hideModal = () => setVisible(false);
+    const [selectVisible, setSelectVisible] = React.useState(false);
+    const showSelectModal = () => setSelectVisible(true);
+    const hideSelectModal = () => setSelectVisible(false);
+
+
+    const [changeNametVisible, setChangeNameVisible] = React.useState(false);
+    const showChangeNameModal = () => setChangeNameVisible(true);
+    const hideChangeNameModal = () => setChangeNameVisible(false);
+
     const containerStyle = { backgroundColor: 'white', padding: 20 };
 
     let splitName = "N/A"
@@ -18,11 +24,14 @@ const ChangeSplitModal = () => {
     return (
         <View>
             <Portal>
-                <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
-                    <Text>Example Modal.  Click outside this area to dismiss.</Text>
+                <Modal visible={selectVisible} onDismiss={hideSelectModal} contentContainerStyle={containerStyle}>
+                    <Text>Select Split</Text>
+                </Modal>
+                <Modal visible={changeNametVisible} onDismiss={hideChangeNameModal} contentContainerStyle={containerStyle}>
+                    <Text>Change Name.</Text>
                 </Modal>
             </Portal>
-            <Button onPress={showModal}>
+            <Button onPress={showSelectModal} onLongPress={showChangeNameModal}>
                 {splitName}
                 <Icon source="camera"
                     size={20} />
