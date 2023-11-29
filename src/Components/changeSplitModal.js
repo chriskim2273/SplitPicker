@@ -1,13 +1,19 @@
 import * as React from 'react';
 import { View } from 'react-native';
 import { Modal, Portal, Text, Button, Icon } from 'react-native-paper';
+import { SplitData } from '../Context/SplitContext';
 
 const ChangeSplitModal = () => {
     const [visible, setVisible] = React.useState(false);
+    const { splitData, currentSplitId } = SplitData();
 
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
     const containerStyle = { backgroundColor: 'white', padding: 20 };
+
+    let splitName = "N/A"
+    if (currentSplitId in splitData)
+        splitName = splitData[currentSplitId].split_name
 
     return (
         <View>
@@ -17,7 +23,7 @@ const ChangeSplitModal = () => {
                 </Modal>
             </Portal>
             <Button onPress={showModal}>
-                Split Name
+                {splitName}
                 <Icon source="camera"
                     size={20} />
             </Button>

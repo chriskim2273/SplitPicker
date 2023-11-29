@@ -27,43 +27,44 @@ export const SplitContextProvider = ({ children }) => {
         bodyPartsWorked: []
     }
 
-    const [currentSplitId, setCurrentSplitId] = useState("");
+    const generateObjectId = () => {
+        const timestamp = (new Date().getTime() / 1000 | 0).toString(16);
+        return timestamp + 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, function () {
+            return (Math.random() * 16 | 0).toString(16);
+        }).toLowerCase();
+    }
 
-    const defaultSplitData = [
-        {
-            day_name: "",
-            exercises: []
-        },
-        {
-            day_name: "",
-            exercises: []
-        },
-        {
-            day_name: "",
-            exercises: []
-        },
-        {
-            day_name: "",
-            exercises: []
-        },
-        {
-            day_name: "",
-            exercises: []
-        },
-        {
-            day_name: "",
-            exercises: []
-        },
-        {
-            day_name: "",
-            exercises: []
+    const randomObjectId = String(generateObjectId());
+    console.log(randomObjectId);
+
+    const [currentSplitId, setCurrentSplitId] = useState(randomObjectId);
+
+    const blankSingleSplitData = {
+        [randomObjectId]: {
+            'creater_user_id': undefined,
+            'date_created': Date.now().toString(36),
+            'likes': 0,
+            'dislikes': 0,
+            'split_name': 'Default Name',
+            'split_data': [
+                { 'day_name': '', 'exercises': [] },
+                { 'day_name': '', 'exercises': [] },
+                { 'day_name': '', 'exercises': [] },
+                { 'day_name': '', 'exercises': [] },
+                { 'day_name': '', 'exercises': [] },
+                { 'day_name': '', 'exercises': [] },
+                { 'day_name': '', 'exercises': [] }
+            ]
         }
-    ];
+    }
+
+    const defaultSplitData = blankSingleSplitData
 
     const [splitData, setSplitData] = useState(defaultSplitData);
     const [isReady, setIsReady] = useState(false);
 
-    const PERSISTENCE_KEY = 'SPLIT_DATA_V1';
+    const SPLIT_DATA_KEY = 'SPLIT_DATA_V1';
+    const SPLIT_ID_KEY = 'SPLIT_ID_V1';
     useEffect(() => {
         const restoreSplit = async () => {
             try {
@@ -73,11 +74,15 @@ export const SplitContextProvider = ({ children }) => {
                 if (Platform.OS !== 'web' && initialUrl == null) {
                     // Only restore state if there's no deep link and we're not on web
                     */
-                const savedStateString = await AsyncStorage.getItem(PERSISTENCE_KEY);
+                const savedStateString = await AsyncStorage.getItem(SPLIT_DATA_KEY);
                 console.log("Saved State: " + String(savedStateString));
-                const state = savedStateString ? JSON.parse(savedStateString) : defaultSplitData;
+                const splitState = savedStateString ? JSON.parse(savedStateString) : defaultSplitData;
+                const savedSplitId = await AsyncStorage.getItem(SPLIT_ID_KEY);
+                console.log("Saved State: " + String(savedSplitId));
+                const splitIdState = savedSplitId ? JSON.parse(savedSplitId) : randomObjectId;
 
-                setSplitData(state);
+                setSplitData(splitState);
+                setCurrentSplitId(splitIdState);
             } finally {
 
                 //
@@ -93,7 +98,8 @@ export const SplitContextProvider = ({ children }) => {
 
     const saveSplitDataLocally = async () => {
         console.log("Saving to async storage.")
-        AsyncStorage.setItem(PERSISTENCE_KEY, JSON.stringify(splitData));
+        AsyncStorage.setItem(SPLIT_DATA_KEY, JSON.stringify(splitData));
+        AsyncStorage.setItem(SPLIT_ID_KEY, JSON.stringify(currentSplitId));
     }
 
     const clearAsyncStorage = async () => {
@@ -107,7 +113,7 @@ export const SplitContextProvider = ({ children }) => {
     //clearAsyncStorage();
 
     const addDay = () => {
-        let newSplitData = splitData.push({
+        let newSplitData = splitData[currentSplitId].split_data.push({
             day_name: "",
             exercises: []
         })
@@ -115,7 +121,7 @@ export const SplitContextProvider = ({ children }) => {
     }
 
     const addExerciseToDay = (dayIndex) => {
-        splitData[dayIndex]['exercises'].push({ ...exerciseTemplate })
+        splitData[currentSplitId].split_data[dayIndex]['exercises'].push({ ...exerciseTemplate })
         setSplitData(splitData);
         saveSplitDataLocally();
     }
@@ -129,7 +135,7 @@ export const SplitContextProvider = ({ children }) => {
             sets: 0
         }
         */
-        splitData[dayIndex]['exercises'][exerciseIndex] = exerciseData
+        splitData[currentSplitId].split_data[dayIndex]['exercises'][exerciseIndex] = exerciseData
         setSplitData(splitData);
         saveSplitDataLocally();
         //console.log(day);
@@ -141,9 +147,9 @@ export const SplitContextProvider = ({ children }) => {
     }
 
     const setExerciseSetsandReps = (dayIndex, exerciseIndex, newSets, newReps) => {
-        splitData[dayIndex]['exercises'][exerciseIndex]["amountOfSets"] = newSets;
-        splitData[dayIndex]['exercises'][exerciseIndex]["amountOfReps"] = newReps;
-        console.log(splitData[dayIndex]['exercises'][exerciseIndex]);
+        splitData[currentSplitId].split_data[dayIndex]['exercises'][exerciseIndex]["amountOfSets"] = newSets;
+        splitData[currentSplitId].split_data[dayIndex]['exercises'][exerciseIndex]["amountOfReps"] = newReps;
+        console.log(splitData[currentSplitId].split_data[dayIndex]['exercises'][exerciseIndex]);
         setSplitData(splitData);
         saveSplitDataLocally();
     }
@@ -153,12 +159,12 @@ export const SplitContextProvider = ({ children }) => {
     }
 
     const removeExercise = (dayIndex, exerciseIndex) => {
-        splitData[dayIndex]["exercises"].splice(exerciseIndex, 1);
+        splitData[currentSplitId].split_data[dayIndex]["exercises"].splice(exerciseIndex, 1);
         setSplitData(splitData);
         saveSplitDataLocally();
     }
 
-    return (<SplitContext.Provider value={{ splitData, setExercise, addDay, addExerciseToDay, removeExercise, setExerciseSetsandReps }}>{children}</SplitContext.Provider>)
+    return (<SplitContext.Provider value={{ splitData, currentSplitId, setExercise, addDay, addExerciseToDay, removeExercise, setExerciseSetsandReps }}>{children}</SplitContext.Provider>)
 }
 
 export const SplitData = () => {

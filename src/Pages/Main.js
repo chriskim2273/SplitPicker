@@ -12,7 +12,7 @@ import { UserAuth } from '../Context/AuthContext';
 
 function Main() {
     const { user } = UserAuth();
-    const { splitData } = SplitData();
+    const { splitData, currentSplitId } = SplitData();
     const [refresh, startRefresh] = useState(false);
     /*
     console.log(splitData);
@@ -95,15 +95,20 @@ function Main() {
             // Other styles if needed
         },
     });
+    console.log(splitData);
 
-    let splitDayArray = Array.from(splitData, item => item);
+    let currentSplitData = [];
+    if (currentSplitId in splitData)
+        currentSplitData = splitData[currentSplitId].split_data;
+
+    let splitDayArray = Array.from(currentSplitData, item => item);
     //console.log(splitDayArray);
 
 
 
     return (
         <SafeAreaView>
-            <ExerciseScore exerciseScore={ExerciseScoreCalculator(splitData)} />
+            <ExerciseScore exerciseScore={ExerciseScoreCalculator(currentSplitData)} />
             <ScrollView contentContainerStyle={styles.contentContainer}>
                 {splitDayArray.map((splitDay, index) => (
                     <SplitDay key={index + "_split_day"} refreshMain={[refresh, startRefresh]} splitData={splitDay} dayName={splitDay.day_number} dayNumber={index + 1} presetExercises={presetExercises} />
