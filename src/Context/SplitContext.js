@@ -1,11 +1,14 @@
 import { useContext, createContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { UserAuth } from './AuthContext';
 
 import ExerciseScoreCalculator from '../Calculations/exerciseScoreCalculation';
 
 const SplitContext = createContext()
 
 export const SplitContextProvider = ({ children }) => {
+    const { saveSplitsToDatabase } = UserAuth();
+
     const exerciseTemplate = {
         blankExercise: true,
         exerciseName: undefined,
@@ -38,6 +41,7 @@ export const SplitContextProvider = ({ children }) => {
     console.log(randomObjectId);
 
     const [currentSplitId, setCurrentSplitId] = useState(randomObjectId);
+    // SET THIS TO BE THE FIRST ID IN SPLITDATA.. OMGMOMOGOGMGMOGOMGOMGOM
 
     const blankSingleSplitData = {
         [randomObjectId]: {
@@ -45,7 +49,7 @@ export const SplitContextProvider = ({ children }) => {
             'date_created': Date.now().toString(36),
             'likes': 0,
             'dislikes': 0,
-            'split_name': 'Default Name',
+            'split_name': 'Default Name 1',
             'split_data': [
                 { 'day_name': '', 'exercises': [] },
                 { 'day_name': '', 'exercises': [] },
@@ -100,6 +104,7 @@ export const SplitContextProvider = ({ children }) => {
         console.log("Saving to async storage.")
         AsyncStorage.setItem(SPLIT_DATA_KEY, JSON.stringify(splitData));
         AsyncStorage.setItem(SPLIT_ID_KEY, JSON.stringify(currentSplitId));
+        saveSplitsToDatabase(splitData);
     }
 
     const clearAsyncStorage = async () => {
@@ -112,6 +117,17 @@ export const SplitContextProvider = ({ children }) => {
     };
     //clearAsyncStorage();
 
+    const deleteSplit = (split_id) => {
+        let splitIds = Object.keys(splitData);
+        if (splitIds.length > 1) {
+            delete splitData[split_id];
+            setSplitData(splitData);
+            saveSplitDataLocally();
+        }
+        splitIds = Object.keys(splitData);
+        setCurrentSplitId(splitIds[0]);
+    }
+
     const changeSplitName = (split_id, new_split_name) => {
         splitData[split_id]['split_name'] = new_split_name;
         setSplitData(splitData);
@@ -120,12 +136,24 @@ export const SplitContextProvider = ({ children }) => {
 
     const addNewSplit = () => {
         const newSplitId = String(generateObjectId());
+        let largestNumber = 0;
+        for (let split_id in splitData) {
+            let split_name = splitData[split_id]['split_name']
+            let parts = split_name.split(" ");
+            if (parts[0] == "Default" && parts[1] == "Name") {
+                let number = parseInt(parts[2]);
+                if (!isNaN(number))
+                    if (number > largestNumber) {
+                        largestNumber = number;
+                    }
+            }
+        }
         splitData[newSplitId] = {
             'creater_user_id': undefined,
             'date_created': Date.now().toString(36),
             'likes': 0,
             'dislikes': 0,
-            'split_name': 'Default Name',
+            'split_name': 'Default Name ' + String(largestNumber + 1),
             'split_data': [
                 { 'day_name': '', 'exercises': [] },
                 { 'day_name': '', 'exercises': [] },
@@ -143,6 +171,7 @@ export const SplitContextProvider = ({ children }) => {
 
     const setSplit = (split_id) => {
         setCurrentSplitId(split_id);
+        saveSplitDataLocally();
     }
 
     const addDay = () => {
@@ -197,7 +226,7 @@ export const SplitContextProvider = ({ children }) => {
         saveSplitDataLocally();
     }
 
-    return (<SplitContext.Provider value={{ splitData, currentSplitId, setExercise, addDay, addExerciseToDay, removeExercise, setExerciseSetsandReps, addNewSplit, setSplit, changeSplitName }}>{children}</SplitContext.Provider>)
+    return (<SplitContext.Provider value={{ splitData, currentSplitId, setExercise, addDay, addExerciseToDay, removeExercise, setExerciseSetsandReps, addNewSplit, setSplit, changeSplitName, deleteSplit }}>{children}</SplitContext.Provider>)
 }
 
 export const SplitData = () => {

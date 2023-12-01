@@ -53,15 +53,15 @@ function App() {
         <PaperProvider>
           <NavigationContainer>
             <Tab.Navigator>
-              <Tab.Screen name="SplitPicker" component={Main} options={{
+              <Tab.Screen name="My Splits" component={Main} options={{
                 headerRight: (props) => (
                   <AuthenticationButtons />
                 ),
                 headerTitle: (props) => <ChangeSplitModal />
               }} />
-              <Tab.Screen name="Details" component={DetailsScreen} />
-              <Tab.Screen name="Settings" component={Settings} options={{
-                tabBarLabel: 'Updates',
+              <Tab.Screen name="Browse" component={DetailsScreen} />
+              <Tab.Screen name="Settings??" component={Settings} options={{
+                tabBarLabel: 'Settings',
               }} />
             </Tab.Navigator>
           </NavigationContainer>

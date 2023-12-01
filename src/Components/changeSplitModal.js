@@ -5,7 +5,7 @@ import { SplitData } from '../Context/SplitContext';
 import tw from 'tailwind-react-native-classnames';
 
 const ChangeSplitModal = () => {
-    const { splitData, currentSplitId, addNewSplit, setSplit, changeSplitName } = SplitData();
+    const { splitData, currentSplitId, addNewSplit, setSplit, changeSplitName, deleteSplit } = SplitData();
 
     const [selectVisible, setSelectVisible] = React.useState(false);
     const showSelectModal = () => setSelectVisible(true);
@@ -26,10 +26,14 @@ const ChangeSplitModal = () => {
         let splitSelectButtons = [];
         for (let split_id in splitData) {
             splitSelectButtons.push(
-                <Button key={"select_button_" + split_id} onPress={() => {
-                    setSplit(split_id);
+                <Button key={"select_button_" + split_id} onLongPress={() => {
+                    deleteSplit(split_id);
                     hideSelectModal();
-                }}>{split_id + ": " + splitData[split_id]['split_name']}</Button>
+                }}
+                    onPress={() => {
+                        setSplit(split_id);
+                        hideSelectModal();
+                    }}>{split_id + ": " + splitData[split_id]['split_name']}</Button>
             );
         }
         return splitSelectButtons;
@@ -53,6 +57,7 @@ const ChangeSplitModal = () => {
                         onPress={() => {
                             console.log("Added new split");
                             addNewSplit();
+                            hideSelectModal();
                             //startRefreshMain(!refreshMain);
                         }}
                     />
