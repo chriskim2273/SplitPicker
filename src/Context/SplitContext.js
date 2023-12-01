@@ -112,6 +112,39 @@ export const SplitContextProvider = ({ children }) => {
     };
     //clearAsyncStorage();
 
+    const changeSplitName = (split_id, new_split_name) => {
+        splitData[split_id]['split_name'] = new_split_name;
+        setSplitData(splitData);
+        saveSplitDataLocally();
+    }
+
+    const addNewSplit = () => {
+        const newSplitId = String(generateObjectId());
+        splitData[newSplitId] = {
+            'creater_user_id': undefined,
+            'date_created': Date.now().toString(36),
+            'likes': 0,
+            'dislikes': 0,
+            'split_name': 'Default Name',
+            'split_data': [
+                { 'day_name': '', 'exercises': [] },
+                { 'day_name': '', 'exercises': [] },
+                { 'day_name': '', 'exercises': [] },
+                { 'day_name': '', 'exercises': [] },
+                { 'day_name': '', 'exercises': [] },
+                { 'day_name': '', 'exercises': [] },
+                { 'day_name': '', 'exercises': [] }
+            ]
+        }
+        setSplitData(splitData);
+        setCurrentSplitId(newSplitId);
+        saveSplitDataLocally();
+    }
+
+    const setSplit = (split_id) => {
+        setCurrentSplitId(split_id);
+    }
+
     const addDay = () => {
         let newSplitData = splitData[currentSplitId].split_data.push({
             day_name: "",
@@ -164,7 +197,7 @@ export const SplitContextProvider = ({ children }) => {
         saveSplitDataLocally();
     }
 
-    return (<SplitContext.Provider value={{ splitData, currentSplitId, setExercise, addDay, addExerciseToDay, removeExercise, setExerciseSetsandReps }}>{children}</SplitContext.Provider>)
+    return (<SplitContext.Provider value={{ splitData, currentSplitId, setExercise, addDay, addExerciseToDay, removeExercise, setExerciseSetsandReps, addNewSplit, setSplit, changeSplitName }}>{children}</SplitContext.Provider>)
 }
 
 export const SplitData = () => {

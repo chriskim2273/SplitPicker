@@ -23,6 +23,7 @@ const ExerciseCard = (props) => {
             setUserInputReps(Number(text));
             console.log("Changed reps and sets to: " + String(userInputReps) + " x " + String(userInputSets));
             setExerciseSetsandReps(dayNumber - 1, exerciseNumber - 1, userInputSets, Number(text));
+            setRefreshExerciseCard(!refreshExerciseCard);
         }
     }
     const onChangeSets = text => {
@@ -32,6 +33,7 @@ const ExerciseCard = (props) => {
             setUserInputSets(Number(text));
             console.log("Changed reps and sets to: " + String(userInputSets) + " x " + String(userInputSets));
             setExerciseSetsandReps(dayNumber - 1, exerciseNumber - 1, Number(text), userInputReps);
+            setRefreshExerciseCard(!refreshExerciseCard);
         }
     }
 
